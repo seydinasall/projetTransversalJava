@@ -1,0 +1,6 @@
+INDEX VERSION 1.127+C:\Users\clement\Documents\GitHub\projetTransvers\projetTransversalJava\AppliJava\.metadata\.plugins\org.eclipse.jdt.core
+1022503746.index
+4189277599.index
+1117358637.index
+3854468626.index
+1439658353.index

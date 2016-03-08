@@ -1,0 +1,82 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.text.ParseException;
+import java.util.Iterator;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class Json {
+
+	private File json;
+	private String path;
+	
+	public File getJson() {
+		return json;
+	}
+	public void setJson(File json) {
+		this.json = json;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public Json(File file){
+		this.path = file.getAbsolutePath();
+		this.json = file;
+	}
+	
+	public void ParseJson() throws IOException, 
+	org.json.simple.parser.ParseException, JSONException{
+	
+		BufferedReader br = new BufferedReader(new FileReader(this.path));
+		String line = null;
+		StringBuilder json = new StringBuilder();
+		while((line = br.readLine()) !=null)
+		{
+		    json.append(line);
+		}
+		JSONParser parser = new JSONParser();
+	    String str = line;
+	    
+	    Object obj = parser.parse(str);
+		 JSONArray array = (JSONArray)obj;
+		 
+		 for(int i=0;i<array.length();i++){
+			 System.out.println(array.get(i));
+		 }
+		/*	
+		 System.out.println(array.get(1));
+		 System.out.println();
+
+		 JSONObject obj2 = (JSONObject)array.get(1);
+		 System.out.println("Field \"1\"");
+		 System.out.println(obj2.get("1"));    
+
+		 s = "{}";
+		 obj = parser.parse(s);
+		 System.out.println(obj);
+
+		 s = "[5,]";
+		 obj = parser.parse(s);
+		 System.out.println(obj);
+
+		 s = "[5,,2]";
+		 obj = parser.parse(s);
+		 System.out.println(obj);
+		 */
+		
+		
+
+        
+	}
+}
