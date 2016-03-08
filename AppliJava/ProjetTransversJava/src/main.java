@@ -9,10 +9,12 @@ public class main {
 	public static void main(String[] args) throws IOException, ParseException, JSONException {
 		// TODO Auto-generated method stub
 
-		File file = new File("Json/home.json");
 		
+		
+		File file = new File("Json/home.json");
 		Json json = new Json(file);
-		json.ParseJson();
+		
+		MainWindow window = new MainWindow(json);
 	}
 
 }

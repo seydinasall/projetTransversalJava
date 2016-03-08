@@ -1,0 +1,26 @@
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class MainWindow extends JFrame {
+	
+	private JFrame frame;
+	
+	public MainWindow(){
+		frame = new JFrame();
+		frame.setTitle("Twitter - Java");
+		frame.setSize(600, 450);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setVisible(true);
+	    
+	    JPanel pan = new JPanel();
+	    //Définition de sa couleur de fond
+	    pan.setBackground(Color.ORANGE);        
+	    //On prévient notre JFrame que notre JPanel sera son content pane
+	    this.setContentPane(pan);               
+	    this.setVisible(true);
+
+	}
+}

@@ -1,0 +1,39 @@
+import java.util.ArrayList;
+
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+
+public class TweetModel extends AbstractTableModel {
+
+	private ArrayList<Tweet> listTweet;
+	
+	
+	public TweetModel(ArrayList<Tweet> list) {
+		listTweet = list;
+	}
+	
+	@Override
+	public int getColumnCount() {
+		// TODO Auto-generated method stub
+		return 3;
+	}
+
+	@Override
+	public int getRowCount() {
+		// TODO Auto-generated method stub
+		return this.listTweet.size();
+	}
+
+	@Override
+	public String getValueAt(int row, int col) {
+		String str = null;
+		Tweet tweet = this.listTweet.get(row);
+		switch(col) {
+			case 0 :
+				str = listTweet.get(row).getName()+": @"
+					+listTweet.get(row).getScreenName()+System.lineSeparator()
+					+listTweet.get(row).getText();
+		}
+		return str;
+	}
+}
