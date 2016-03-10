@@ -21,7 +21,7 @@ public class TweetModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method 
 		return this.listTweet.size();
 	}
 
@@ -31,10 +31,10 @@ public class TweetModel extends AbstractTableModel {
 		JLabel tweetLab = null;
 		switch(col) {
 			case 0 :
-				 tweetLab = new JLabel("<html><b>"+ 
-					tweet.getName()+
-						 "</b> @" + tweet.getScreenName() + "<br>" +
-						 tweet.getText() + "<br>" +  
+				 tweetLab = new JLabel("<html><div>"+"<img src="+tweet.getAvatar()+">"
+						 +"</div><div><b>"+tweet.getName()
+						 +"</b> @" + tweet.getScreenName() + "<br>" +
+						 tweet.getText() + "<br></div>" +  
 						 tweet.getCreatedAt());
 		}
 		return tweetLab.getText();

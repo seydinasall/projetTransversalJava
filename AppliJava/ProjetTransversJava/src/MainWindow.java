@@ -29,10 +29,10 @@ public class MainWindow extends JFrame {
     	panelFond = new JPanel();
     	panelHead = new JPanel();
     	twitter = json.ParseJson();
-    	Init(json);
+    	Init();
 	}
     
-    public void Init(Json json) throws IOException, ParseException, JSONException{
+    public void Init() throws IOException, ParseException, JSONException{
     	frame.setPreferredSize(new Dimension(600, 500));
         frame.setLayout(new BorderLayout());
         frame.add(lpane, BorderLayout.CENTER);
@@ -49,8 +49,7 @@ public class MainWindow extends JFrame {
         tabTwitter.setRowHeight(100);
         JScrollPane scroll = new JScrollPane(tabTwitter);
         panelFond.add(scroll);
-        
-        
+
         
         lpane.add(panelFond, new Integer(0), 0);
         lpane.add(panelHead, new Integer(1), 0);        
