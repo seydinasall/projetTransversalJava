@@ -292,11 +292,15 @@ public class Api {
 		 return jsonresponse;
 	}
 	
-	/*
-	send timeline request an return timeline in String
-	*/
 	
-	public String GetTimeline(String access_token, String access_token_secret) 
+
+	// does not work with absolute (i.e. http://) urls. Only local files.
+	// returns a valid JSONObject, regardless
+	// if it spoke to twitter and did the update succesfully, it returns just the object.
+	// if any error occurs, whether from twitter or failing to talk to twitter entirely, an response_status=error is sent back
+	
+	
+	public String verifyCredentials(String access_token, String access_token_secret) 
 			throws KeyManagementException, NoSuchAlgorithmException, IOException
 	{
 		JSONObject jsonresponse = new JSONObject();
@@ -312,9 +316,11 @@ public class Api {
 		// get the timestamp
 		String oauth_timestamp = GenerateTimestamp();
 
-		//encode URL
+		// the parameter string must be in alphabetical order
+		// this time, I add 3 extra params to the request, "lang", "result_type" and "q".
 		String parameter_string = "oauth_consumer_key=" + twitter_consumer_key + "&oauth_nonce=" + oauth_nonce + "&oauth_signature_method=" + oauth_signature_method + 
 			"&oauth_timestamp=" + oauth_timestamp + "&oauth_token=" + encode(oauth_token) + "&oauth_version=1.0";	
+		//System.out.println("parameter_string=" + parameter_string);
 		String twitter_endpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json";
 		String twitter_endpoint_host = "api.twitter.com";
 		String twitter_endpoint_path = "/1.1/statuses/home_timeline.json";
@@ -356,7 +362,6 @@ public class Api {
 
 		 try {
 			 try {
-				 
 				 SSLContext sslcontext = SSLContext.getInstance("TLS");
 				 sslcontext.init(null, null, null);
 				 SSLSocketFactory ssf = sslcontext.getSocketFactory();

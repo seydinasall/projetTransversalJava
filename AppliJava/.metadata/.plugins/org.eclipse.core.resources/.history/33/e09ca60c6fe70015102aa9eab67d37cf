@@ -119,7 +119,7 @@ public class Api {
 		return oauthTimestamp;
 	}
 	
-	public String GenerateSignature(String oauthSignature, String signatureBaseString, String oauth_token_secret){
+	public String GenerateSignature(String oauthSignature, String signatureBaseString){
 		try {
 			oauthSignature = computeSignature(signatureBaseString, twitter_consumer_secret + "&" + encode(oauth_token_secret));  // note the & at the end. Normally the user access_token would go here, but we don't know it yet for request_token
 		} catch (Exception e) {
@@ -140,7 +140,7 @@ public class Api {
 		return AuthHeader;
 	}
 	
-	
+	public void Auth
 	
 	// This is the search example, using a GET call
 	// INPUT: the search query (q), the user's access_token and the user's access_token_secret
@@ -292,12 +292,16 @@ public class Api {
 		 return jsonresponse;
 	}
 	
-	/*
-	send timeline request an return timeline in String
-	*/
 	
-	public String GetTimeline(String access_token, String access_token_secret) 
-			throws KeyManagementException, NoSuchAlgorithmException, IOException
+
+	// does not work with absolute (i.e. http://) urls. Only local files.
+	// returns a valid JSONObject, regardless
+	// if it spoke to twitter and did the update succesfully, it returns just the object.
+	// if any error occurs, whether from twitter or failing to talk to twitter entirely, an response_status=error is sent back
+	
+	
+	public String verifyCredentials(String access_token, String access_token_secret) 
+			throws KeyManagementException, NoSuchAlgorithmException
 	{
 		JSONObject jsonresponse = new JSONObject();
 		String str = null;
@@ -312,9 +316,11 @@ public class Api {
 		// get the timestamp
 		String oauth_timestamp = GenerateTimestamp();
 
-		//encode URL
+		// the parameter string must be in alphabetical order
+		// this time, I add 3 extra params to the request, "lang", "result_type" and "q".
 		String parameter_string = "oauth_consumer_key=" + twitter_consumer_key + "&oauth_nonce=" + oauth_nonce + "&oauth_signature_method=" + oauth_signature_method + 
 			"&oauth_timestamp=" + oauth_timestamp + "&oauth_token=" + encode(oauth_token) + "&oauth_version=1.0";	
+		//System.out.println("parameter_string=" + parameter_string);
 		String twitter_endpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json";
 		String twitter_endpoint_host = "api.twitter.com";
 		String twitter_endpoint_path = "/1.1/statuses/home_timeline.json";
@@ -323,14 +329,14 @@ public class Api {
 		String oauth_signature = "";
 		
 		//get the signature
-		oauth_signature = GenerateSignature(oauth_signature, signature_base_string, oauth_token_secret);
+		oauth_signature = GenerateSignature(oauth_signature, signature_base_string);
 		
 		//generate header
 		String authorization_header_string = GenerateHeader(
 				oauth_timestamp, oauth_nonce, oauth_signature,
 				oauth_token);
 
-		//Http protocol / requete http
+
 		 HttpParams params = new SyncBasicHttpParams();
 		 HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 		 HttpProtocolParams.setContentCharset(params, "UTF-8");
@@ -356,7 +362,6 @@ public class Api {
 
 		 try {
 			 try {
-				 
 				 SSLContext sslcontext = SSLContext.getInstance("TLS");
 				 sslcontext.init(null, null, null);
 				 SSLSocketFactory ssf = sslcontext.getSocketFactory();
@@ -364,9 +369,9 @@ public class Api {
 				 socket.connect(
 				   new InetSocketAddress(host.getHostName(), host.getPort()), 0);
 				 conn.bind(socket, params);
-
-				 
-				 //generate request timeline
+				 //-----------------------------------------------------------------
+				 // the following line adds 3 params to the request just as the parameter string did above. They must match up or the request will fail.
+				 //generate request
 				 BasicHttpEntityEnclosingRequest request2 = new BasicHttpEntityEnclosingRequest("GET", twitter_endpoint_path);
 				 request2.setParams(params);
 				 request2.addHeader("Authorization", authorization_header_string); // always add the Authorization header
@@ -382,8 +387,11 @@ public class Api {
 				 }
 				 else
 				 {
-					 // if successful, return String with timeline
+					 // if successful, the response should be a JSONObject of tweets
+					 //JSONObject jo = new JSONObject(EntityUtils.toString(response2.getEntity()));
+					 System.out.println("debut");
 					 str = EntityUtils.toString(response2.getEntity());
+					 System.out.println("fin");
 					 
 					 
 					 conn.close();
@@ -403,7 +411,15 @@ public class Api {
 		 {
 			 
 		 }
+		 catch(IOException ioe)
+		 {
+			 
+		 }
 		 return str;
+	}
+	
+	public void Auth(){
+		
 	}
 }	
 	

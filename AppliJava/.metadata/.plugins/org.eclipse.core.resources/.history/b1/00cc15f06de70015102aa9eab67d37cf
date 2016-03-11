@@ -119,7 +119,7 @@ public class Api {
 		return oauthTimestamp;
 	}
 	
-	public String GenerateSignature(String oauthSignature, String signatureBaseString, String oauth_token_secret){
+	public String GenerateSignature(String oauthSignature, String signatureBaseString){
 		try {
 			oauthSignature = computeSignature(signatureBaseString, twitter_consumer_secret + "&" + encode(oauth_token_secret));  // note the & at the end. Normally the user access_token would go here, but we don't know it yet for request_token
 		} catch (Exception e) {
@@ -140,7 +140,125 @@ public class Api {
 		return AuthHeader;
 	}
 	
-	
+	public String UseApi(String access_token, String access_token_secret, 
+			String twitter_end, String twitter_end_path) 
+			throws NoSuchAlgorithmException, KeyManagementException{
+		
+		JSONObject jsonresponse = new JSONObject();
+		String str = null;
+		String oauth_token = access_token;
+		String oauth_token_secret = access_token_secret;
+		String get_or_post = "GET";
+		String oauth_signature_method = "HMAC-SHA1";
+		
+		// generate authorization header
+		String oauth_nonce = GenerateAuthNonce();
+		
+		// get the timestamp
+		String oauth_timestamp = GenerateTimestamp();
+
+		// the parameter string must be in alphabetical order
+		// this time, I add 3 extra params to the request, "lang", "result_type" and "q".
+		String parameter_string = "oauth_consumer_key=" + twitter_consumer_key + "&oauth_nonce=" + oauth_nonce + "&oauth_signature_method=" + oauth_signature_method + 
+			"&oauth_timestamp=" + oauth_timestamp + "&oauth_token=" + encode(oauth_token) + "&oauth_version=1.0";	
+		//System.out.println("parameter_string=" + parameter_string);
+		String twitter_endpoint = twitter_end; 
+		String twitter_endpoint_host = "api.twitter.com";
+		String twitter_endpoint_path = twitter_end_path; 
+		String signature_base_string = get_or_post + "&"+ encode(twitter_endpoint) + "&" + encode(parameter_string);
+		
+		String oauth_signature = "";
+		
+		//get the signature
+		oauth_signature = GenerateSignature(oauth_signature, signature_base_string);
+		
+		//generate header
+		String authorization_header_string = GenerateHeader(
+				oauth_timestamp, oauth_nonce, oauth_signature,
+				oauth_token);
+
+
+		 HttpParams params = new SyncBasicHttpParams();
+		 HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+		 HttpProtocolParams.setContentCharset(params, "UTF-8");
+		 HttpProtocolParams.setUserAgent(params, "HttpCore/1.1");
+		 HttpProtocolParams.setUseExpectContinue(params, false);
+
+		 HttpProcessor httpproc = new ImmutableHttpProcessor(new HttpRequestInterceptor[] {
+	                // Required protocol interceptors
+	                new RequestContent(),
+	                new RequestTargetHost(),
+	                // Recommended protocol interceptors
+	                new RequestConnControl(),
+	                new RequestUserAgent(),
+	                new RequestExpectContinue()});
+
+		 HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
+		 HttpContext context = new BasicHttpContext(null);
+		 HttpHost host = new HttpHost(twitter_endpoint_host,443);
+		 DefaultHttpClientConnection conn = new DefaultHttpClientConnection();
+
+		 context.setAttribute(ExecutionContext.HTTP_CONNECTION, conn);
+		 context.setAttribute(ExecutionContext.HTTP_TARGET_HOST, host);
+
+		 try {
+			 try {
+				 SSLContext sslcontext = SSLContext.getInstance("TLS");
+				 sslcontext.init(null, null, null);
+				 SSLSocketFactory ssf = sslcontext.getSocketFactory();
+				 Socket socket = ssf.createSocket();
+				 socket.connect(
+				   new InetSocketAddress(host.getHostName(), host.getPort()), 0);
+				 conn.bind(socket, params);
+				 
+				 //-----------------------------------------------------------------
+				 // the following line adds 3 params to the request just as the parameter string did above. They must match up or the request will fail.
+				 //generate request
+				 BasicHttpEntityEnclosingRequest request2 = new BasicHttpEntityEnclosingRequest("GET", twitter_endpoint_path);
+				 request2.setParams(params);
+				 request2.addHeader("Authorization", authorization_header_string); // always add the Authorization header
+				 httpexecutor.preProcess(request2, httpproc, context);
+				 HttpResponse response2 = httpexecutor.execute(request2, conn, context);
+				 response2.setParams(params);
+				 httpexecutor.postProcess(response2, httpproc, context);
+
+				 if(response2.getStatusLine().toString().indexOf("500") != -1)
+				 {
+					 jsonresponse.put("response_status", "error");
+					 jsonresponse.put("message", "Twitter auth error.");
+				 }
+				 else
+				 {
+					 // if successful, the response should be a JSONObject of tweets
+					 //JSONObject jo = new JSONObject(EntityUtils.toString(response2.getEntity()));
+					 System.out.println("debut");
+					 str = EntityUtils.toString(response2.getEntity());
+					 System.out.println("fin");
+					 
+					 
+					 conn.close();
+				 }   
+			 }
+			 catch(HttpException he) 
+			 {	
+				 System.out.println(he.getMessage());
+				 jsonresponse.put("response_status", "error");
+				 jsonresponse.put("message", "verifyCredentials HttpException message=" + he.getMessage());
+			 }
+			 finally {
+				 conn.close();
+			 }
+		 } 
+		 catch(JSONException jsone)
+		 {
+			 
+		 }
+		 catch(IOException ioe)
+		 {
+			 
+		 }
+		 return str;
+	}
 	
 	// This is the search example, using a GET call
 	// INPUT: the search query (q), the user's access_token and the user's access_token_secret
@@ -292,118 +410,29 @@ public class Api {
 		 return jsonresponse;
 	}
 	
-	/*
-	send timeline request an return timeline in String
-	*/
 	
-	public String GetTimeline(String access_token, String access_token_secret) 
-			throws KeyManagementException, NoSuchAlgorithmException, IOException
+
+	// does not work with absolute (i.e. http://) urls. Only local files.
+	// returns a valid JSONObject, regardless
+	// if it spoke to twitter and did the update succesfully, it returns just the object.
+	// if any error occurs, whether from twitter or failing to talk to twitter entirely, an response_status=error is sent back
+	
+	
+	public String verifyCredentials(String access_token, String access_token_secret) 
+			throws KeyManagementException, NoSuchAlgorithmException
 	{
-		JSONObject jsonresponse = new JSONObject();
-		String str = null;
-		String oauth_token = access_token;
-		String oauth_token_secret = access_token_secret;
-		String get_or_post = "GET";
-		String oauth_signature_method = "HMAC-SHA1";
 		
-		// generate authorization header
-		String oauth_nonce = GenerateAuthNonce();
-		
-		// get the timestamp
-		String oauth_timestamp = GenerateTimestamp();
-
-		//encode URL
-		String parameter_string = "oauth_consumer_key=" + twitter_consumer_key + "&oauth_nonce=" + oauth_nonce + "&oauth_signature_method=" + oauth_signature_method + 
-			"&oauth_timestamp=" + oauth_timestamp + "&oauth_token=" + encode(oauth_token) + "&oauth_version=1.0";	
 		String twitter_endpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json";
-		String twitter_endpoint_host = "api.twitter.com";
 		String twitter_endpoint_path = "/1.1/statuses/home_timeline.json";
-		String signature_base_string = get_or_post + "&"+ encode(twitter_endpoint) + "&" + encode(parameter_string);
 		
-		String oauth_signature = "";
+		String flux = UseApi(access_token, access_token_secret, 
+				twitter_endpoint, twitter_endpoint_path);
 		
-		//get the signature
-		oauth_signature = GenerateSignature(oauth_signature, signature_base_string, oauth_token_secret);
+		return flux;
 		
-		//generate header
-		String authorization_header_string = GenerateHeader(
-				oauth_timestamp, oauth_nonce, oauth_signature,
-				oauth_token);
-
-		//Http protocol / requete http
-		 HttpParams params = new SyncBasicHttpParams();
-		 HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-		 HttpProtocolParams.setContentCharset(params, "UTF-8");
-		 HttpProtocolParams.setUserAgent(params, "HttpCore/1.1");
-		 HttpProtocolParams.setUseExpectContinue(params, false);
-
-		 HttpProcessor httpproc = new ImmutableHttpProcessor(new HttpRequestInterceptor[] {
-	                // Required protocol interceptors
-	                new RequestContent(),
-	                new RequestTargetHost(),
-	                // Recommended protocol interceptors
-	                new RequestConnControl(),
-	                new RequestUserAgent(),
-	                new RequestExpectContinue()});
-
-		 HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
-		 HttpContext context = new BasicHttpContext(null);
-		 HttpHost host = new HttpHost(twitter_endpoint_host,443);
-		 DefaultHttpClientConnection conn = new DefaultHttpClientConnection();
-
-		 context.setAttribute(ExecutionContext.HTTP_CONNECTION, conn);
-		 context.setAttribute(ExecutionContext.HTTP_TARGET_HOST, host);
-
-		 try {
-			 try {
-				 
-				 SSLContext sslcontext = SSLContext.getInstance("TLS");
-				 sslcontext.init(null, null, null);
-				 SSLSocketFactory ssf = sslcontext.getSocketFactory();
-				 Socket socket = ssf.createSocket();
-				 socket.connect(
-				   new InetSocketAddress(host.getHostName(), host.getPort()), 0);
-				 conn.bind(socket, params);
-
-				 
-				 //generate request timeline
-				 BasicHttpEntityEnclosingRequest request2 = new BasicHttpEntityEnclosingRequest("GET", twitter_endpoint_path);
-				 request2.setParams(params);
-				 request2.addHeader("Authorization", authorization_header_string); // always add the Authorization header
-				 httpexecutor.preProcess(request2, httpproc, context);
-				 HttpResponse response2 = httpexecutor.execute(request2, conn, context);
-				 response2.setParams(params);
-				 httpexecutor.postProcess(response2, httpproc, context);
-
-				 if(response2.getStatusLine().toString().indexOf("500") != -1)
-				 {
-					 jsonresponse.put("response_status", "error");
-					 jsonresponse.put("message", "Twitter auth error.");
-				 }
-				 else
-				 {
-					 // if successful, return String with timeline
-					 str = EntityUtils.toString(response2.getEntity());
-					 
-					 
-					 conn.close();
-				 }   
-			 }
-			 catch(HttpException he) 
-			 {	
-				 System.out.println(he.getMessage());
-				 jsonresponse.put("response_status", "error");
-				 jsonresponse.put("message", "verifyCredentials HttpException message=" + he.getMessage());
-			 }
-			 finally {
-				 conn.close();
-			 }
-		 } 
-		 catch(JSONException jsone)
-		 {
-			 
-		 }
-		 return str;
+		
+		
 	}
+	
 }	
 	
