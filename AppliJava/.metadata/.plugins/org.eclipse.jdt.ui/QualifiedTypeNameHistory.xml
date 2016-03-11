@@ -8,11 +8,9 @@
 <fullyQualifiedTypeName name="javax.swing.JLayeredPane"/>
 <fullyQualifiedTypeName name="java.awt.Dimension"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
-<fullyQualifiedTypeName name="javax.swing.JTable"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
 <fullyQualifiedTypeName name="javax.swing.JLabel"/>
-<fullyQualifiedTypeName name="javax.swing.JButton"/>
 <fullyQualifiedTypeName name="org.omg.CORBA.Request"/>
 <fullyQualifiedTypeName name="org.apache.http.params.HttpProtocolParams"/>
 <fullyQualifiedTypeName name="org.apache.http.params.HttpParams"/>
@@ -25,4 +23,9 @@
 <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
 <fullyQualifiedTypeName name="java.net.URLEncoder"/>
 <fullyQualifiedTypeName name="javax.crypto.SecretKey"/>
+<fullyQualifiedTypeName name="javax.swing.JButton"/>
+<fullyQualifiedTypeName name="javax.swing.JTable"/>
+<fullyQualifiedTypeName name="java.awt.GridLayout"/>
+<fullyQualifiedTypeName name="javax.swing.AbstractAction"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
 </qualifiedTypeNameHistroy>

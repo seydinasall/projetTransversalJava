@@ -1,0 +1,21 @@
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+public class RefreshAction extends AbstractAction{
+
+	public RefreshAction(String texte){
+		super(texte);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+		ManagerApi manager = new ManagerApi();
+		MainWindow window = new MainWindow();  
+
+		manager.GetTweet(json, api, window);
+		
+	} 
+}

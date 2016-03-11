@@ -292,9 +292,8 @@ public class Api {
 		 return jsonresponse;
 	}
 	
-	/*
-	send timeline request an return timeline in String
-	*/
+	
+	//send timeline request an return timeline in String
 	
 	public String GetTimeline(String access_token, String access_token_secret) 
 			throws KeyManagementException, NoSuchAlgorithmException, IOException
@@ -361,8 +360,7 @@ public class Api {
 				 sslcontext.init(null, null, null);
 				 SSLSocketFactory ssf = sslcontext.getSocketFactory();
 				 Socket socket = ssf.createSocket();
-				 socket.connect(
-				   new InetSocketAddress(host.getHostName(), host.getPort()), 0);
+				 socket.connect( new InetSocketAddress(host.getHostName(), host.getPort()), 0);
 				 conn.bind(socket, params);
 
 				 

@@ -1,11 +1,7 @@
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.io.InputStreamReader;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.io.FileInputStream;
 
 import org.json.JSONArray;
 import org.json.JSONException;
