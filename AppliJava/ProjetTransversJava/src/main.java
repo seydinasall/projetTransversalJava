@@ -7,16 +7,16 @@ import org.json.simple.parser.ParseException;
 
 public class main {
 
-	public static void main(String[] args) throws KeyManagementException, 
-		NoSuchAlgorithmException, IOException, ParseException, JSONException  {
+	public static void main(String[] args) 
+			throws KeyManagementException, NoSuchAlgorithmException,
+			IOException, ParseException, JSONException {
 		// TODO Auto-generated method stub
-	
-		Api api = new Api();
-		Json json = new Json(api);
-		MainWindow window = new MainWindow();  
 
-		ManagerApi managerTimeline = new ManagerApi();
-		managerTimeline.GetTweet(json,api,window);
+		Api api = new Api();
+		String apiReturn = api.GetTimeline(
+				api.getTwitter_acces_token(), api.getTwitter_acces_secret());
+		Json json = new Json(apiReturn);
+		MainWindow window = new MainWindow(json);  
 	}
 
 }

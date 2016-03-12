@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="q" key="selection"/>
+		<item value="Main" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="main"/>
 			<item value="q"/>
 			<item value="oauth_token_secret"/>
 			<item value="params"/>
@@ -15,7 +16,6 @@
 			<item value="request2"/>
 			<item value="verif"/>
 			<item value="getTwitterAccessTokenFromAuthorizationCode"/>
-			<item value="json"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Encode("/>

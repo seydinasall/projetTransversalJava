@@ -1,0 +1,75 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Json {
+
+	private String flux;
+	private String type;
+	
+	public String getFlux() {
+		return flux;
+	}
+	public void setFlux(String flux) {
+		this.flux = flux;
+	}
+
+
+	public Json(Api api, String type) 
+			throws KeyManagementException, NoSuchAlgorithmException, IOException{
+
+		this.type = type;
+		if(type == "timeline"){
+			this.flux = api.GetTimeline(api.getTwitter_acces_token(),
+				api.getTwitter_acces_secret());
+		}
+		else if(type == "account"){
+			this.flux = api.AcountShow(api.getTwitter_acces_token(),
+					api.getTwitter_acces_secret());
+		}
+	}
+	
+	public Json(Api api, String type, String textField) 
+			throws KeyManagementException, NoSuchAlgorithmException{
+		
+		this.flux = api.searchTweets(api.getTwitter_acces_token(),
+				api.getTwitter_acces_secret(), textField);
+	}
+	
+	public ArrayList<Tweet> ParseJson() throws JSONException {
+		
+		JSONArray array = new JSONArray(flux);
+		ArrayList<Tweet> listTweet = new ArrayList<Tweet>();
+		try{	
+		    
+		    
+		    //put the value we need in tweets 
+		    for (int i=0;i<array.length();i++){
+		    	JSONObject jsonObject = array.getJSONObject(i);
+		    	String createdAt = jsonObject.getString("created_at");
+		    	String text = jsonObject.getString("text");
+		    	
+		    	JSONObject jsonObject2 = jsonObject.getJSONObject("user");
+		    	String name = jsonObject2.getString("name");
+		    	String screenName = jsonObject2.getString("screen_name");
+		    	String avatar = jsonObject2.getString("profile_image_url");
+		    	
+		    	listTweet.add(new Tweet(createdAt,text,name,screenName,avatar));
+		    	
+		    }
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return listTweet;
+	}
+	
+	public ArrayList<Acount> ParseJsonAcount(){
+		return null;
+			
+	}
+}
