@@ -9,40 +9,29 @@ import org.json.JSONObject;
 
 public class Json {
 
-	private String flux = null;
-	private JSONArray search = null;
+	private JSONArray search ;
 	
-	public String getFlux() {
-		return flux;
+	public JSONArray getSearch() {
+		return search;
 	}
-	public void setFlux(String flux) {
-		this.flux = flux;
+	public void setSearch(JSONArray flux) {
+		this.search = flux;
 	}
 
-
-	public Json(String apiReturn){ 
-		
-		try{
-			this.flux = apiReturn;
-			search = new JSONArray(flux);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
 	public Json(JSONArray apiReturn){
 		this.search = apiReturn;
 	}
 	
 	public ArrayList<Tweet> ParseJson() throws JSONException {
 		
-		JSONArray array = new JSONArray(flux);
+		
 		ArrayList<Tweet> listTweet = new ArrayList<Tweet>();
 		try{	
 		    
 		    
 		    //put the value we need in tweets 
-		    for (int i=0;i<array.length();i++){
-		    	JSONObject jsonObject = array.getJSONObject(i);
+		    for (int i=0;i<search.length();i++){
+		    	JSONObject jsonObject = search.getJSONObject(i);
 		    	String createdAt = jsonObject.getString("created_at");
 		    	String text = jsonObject.getString("text");
 		    	

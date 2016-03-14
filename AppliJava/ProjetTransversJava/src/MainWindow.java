@@ -115,8 +115,7 @@ public class MainWindow extends JFrame {
 				
 				Json jsonRefresh;
 				try {
-					String apiReturn = api.GetTimeline(api.getTwitter_acces_token(), 
-							api.getTwitter_acces_secret());
+					JSONArray apiReturn = api.GetTimeline();
 					jsonRefresh = new Json(apiReturn);
 					
 					ArrayList<Tweet> twitterUpdate = jsonRefresh.ParseJson();
@@ -145,8 +144,7 @@ public class MainWindow extends JFrame {
 				JSONArray apiReturn = null;
 				Json jsonSearch;
 				try {
-					apiReturn = api.searchTweets(jtf.getText(), 
-							api.getTwitter_acces_token(), api.getTwitter_acces_secret());
+					apiReturn = api.searchTweets(jtf.getText());
 					jsonSearch = new Json(apiReturn);
 					
 					ArrayList<Tweet> twitterSearch = jsonSearch.ParseJsonSearch();

@@ -8,6 +8,7 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="twitter_consumer_secret"/>
 			<item value="main"/>
 			<item value="q"/>
 			<item value="oauth_token_secret"/>
@@ -15,7 +16,6 @@
 			<item value="twitter_endpoint_path"/>
 			<item value="request2"/>
 			<item value="verif"/>
-			<item value="getTwitterAccessTokenFromAuthorizationCode"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Encode("/>
