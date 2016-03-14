@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,8 +25,7 @@ public class MainWindow extends JFrame {
     private ArrayList<Tweet> twitter;
     private JTable tabTwitter;
 	private JButton refresh;
-	private JTextField jtf;
-	private JLabel jl;
+	private JTextField jtf; 
 
 
 	public JTextField getJtf() {
@@ -131,10 +129,8 @@ public class MainWindow extends JFrame {
 				
 			}
 		});
-        
         panelHead.add(refresh,BorderLayout.WEST);
 
-        //Button search action
         Font police = new Font("Arial", Font.BOLD, 12);
         jtf.setFont(police);
         jtf.setPreferredSize(new Dimension(150, 30));
@@ -164,16 +160,7 @@ public class MainWindow extends JFrame {
         
         panelHead.add(jtf,BorderLayout.EAST);
 
-        AddAccountInfo();
-        
         frame.pack();
         frame.setVisible(true);
-    }
-    
-    public void AddAccountInfo() throws JSONException{
-    	Api api = new Api();
-    	Json json = new Json(api.GetAccount());
-    	jl = json.ParseJsonAccount();
-    	panelHead.add(jl,BorderLayout.CENTER);
     }
 }

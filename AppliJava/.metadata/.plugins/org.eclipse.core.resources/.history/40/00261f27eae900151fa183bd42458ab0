@@ -31,8 +31,8 @@ public class TweetModel extends AbstractTableModel {
 		JLabel tweetLab = null;
 		switch(col) {
 			case 0 :
-				 tweetLab = new JLabel("<html>"+"<img src="+tweet.getAvatar()+">"
-						 +"<b>"+tweet.getName()
+				 tweetLab = new JLabel("<html><div>"+"<img src="+tweet.getAvatar()+">"
+						 +"</div><div><b>"+tweet.getName()
 						 +"</b> @" + tweet.getScreenName() + "<br>" +
 						 tweet.getText() + "<br></div>" +  
 						 tweet.getCreatedAt());

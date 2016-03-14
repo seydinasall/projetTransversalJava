@@ -134,7 +134,6 @@ public class MainWindow extends JFrame {
         
         panelHead.add(refresh,BorderLayout.WEST);
 
-        //Button search action
         Font police = new Font("Arial", Font.BOLD, 12);
         jtf.setFont(police);
         jtf.setPreferredSize(new Dimension(150, 30));
@@ -172,7 +171,7 @@ public class MainWindow extends JFrame {
     
     public void AddAccountInfo() throws JSONException{
     	Api api = new Api();
-    	Json json = new Json(api.GetAccount());
+    	
     	jl = json.ParseJsonAccount();
     	panelHead.add(jl,BorderLayout.CENTER);
     }

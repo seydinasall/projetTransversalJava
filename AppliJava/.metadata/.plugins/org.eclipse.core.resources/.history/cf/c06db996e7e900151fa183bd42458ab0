@@ -92,8 +92,8 @@ public class Json {
 			String screen_name = jsonObject.getString("screen_name");
 			String profile_image_url = jsonObject.getString("profile_image_url");
 			
-			account = new JLabel("<html>"+"<img src="+profile_image_url+">"
-					 +"<b>"+name
+			account = new JLabel("<html><div>"+"<img src="+profile_image_url+">"
+					 +"</div><div><b>"+name
 					 +"</b> @" + screen_name);
 			
 		}catch(Exception e){

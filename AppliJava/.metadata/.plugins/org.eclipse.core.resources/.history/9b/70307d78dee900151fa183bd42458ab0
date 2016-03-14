@@ -233,7 +233,6 @@ public class Api {
 				 {
 					 // if successful, the response should be a JSONONArray of tweets
 					 JSONObject jo = new JSONObject(EntityUtils.toString(response2.getEntity()));
-					 System.out.println(response2.getEntity());
 					 System.out.println(jo.toString());
 					 ja = jo.getJSONArray("statuses");
 					  
@@ -373,10 +372,10 @@ public class Api {
 	}
 	
 	
-	public String GetAccount(){
+	public JSONArray GetAccount(){
 		
 		JSONObject jsonresponse = new JSONObject();
-		String str = null;
+		JSONArray ja = null;
 		String get_or_post = "GET";
 		String oauth_signature_method = "HMAC-SHA1";
 			try{
@@ -458,8 +457,9 @@ public class Api {
 						 else
 						 {
 							 // if successful, return String with timeline
-							 str = EntityUtils.toString(response2.getEntity());
-							 
+							 String str = EntityUtils.toString(response2.getEntity());
+							 System.out.println(str);
+							 ja = new JSONArray(str);
 							 
 							 conn.close();
 						 }   
@@ -479,7 +479,7 @@ public class Api {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-	 return str;
+	 return ja;
 	 }
 }	
 	

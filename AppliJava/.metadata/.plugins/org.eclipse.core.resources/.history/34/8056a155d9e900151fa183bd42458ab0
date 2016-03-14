@@ -1,6 +1,7 @@
+import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.JLabel;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,20 +10,16 @@ import org.json.JSONObject;
 public class Json {
 
 	private JSONArray search ;
-	private String account;
 	
 	public JSONArray getSearch() {
 		return search;
 	}
-	public void setSearch(JSONArray jArray) {
-		this.search = jArray;
+	public void setSearch(JSONArray flux) {
+		this.search = flux;
 	}
 
 	public Json(JSONArray apiReturn){
 		this.search = apiReturn;
-	}
-	public Json(String str){
-		this.account = str;
 	}
 	
 	public ArrayList<Tweet> ParseJson() throws JSONException {
@@ -81,24 +78,5 @@ public class Json {
 			e.printStackTrace();
 		}
 		return listTweet;
-	}
-	
-	public JLabel ParseJsonAccount() throws JSONException{
-		
-		JSONObject jsonObject = new JSONObject(account);
-		JLabel account = null;
-		try{
-			String name = jsonObject.getString("name");
-			String screen_name = jsonObject.getString("screen_name");
-			String profile_image_url = jsonObject.getString("profile_image_url");
-			
-			account = new JLabel("<html>"+"<img src="+profile_image_url+">"
-					 +"<b>"+name
-					 +"</b> @" + screen_name);
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return account;
 	}
 }
