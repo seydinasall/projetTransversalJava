@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/ProjetTransversJava/src/main.java"/>
+<listEntry value="/ProjetTransversJava/src/com/clement/seydina/Programme/main.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="main"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.clement.seydina.Programme.main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ProjetTransversJava"/>
 </launchConfiguration>
