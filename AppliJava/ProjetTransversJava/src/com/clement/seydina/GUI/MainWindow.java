@@ -83,7 +83,7 @@ public class MainWindow extends JFrame {
 
 	public void AddAccountInfo() throws JSONException{
 	    	Api api = new Api();
-	    	Json json = new Json(api.GetAccount());
+	    	Json json = new Json(api.getAccount());
 	    	jl = json.ParseJsonAccount();
 	    	panelHead.add(jl,BorderLayout.CENTER);
 	}
@@ -129,7 +129,7 @@ public class MainWindow extends JFrame {
 				
 				Json jsonRefresh;
 				try {
-					JSONArray apiReturn = api.GetTimeline();
+					JSONArray apiReturn = api.getTimeline();
 					jsonRefresh = new Json(apiReturn);
 					
 					ArrayList<Tweet> twitterUpdate = jsonRefresh.ParseJson();
@@ -163,7 +163,7 @@ public class MainWindow extends JFrame {
 					apiReturn = api.searchTweets(jtf.getText());
 					jsonSearch = new Json(apiReturn);
 					
-					ArrayList<Tweet> twitterSearch = jsonSearch.ParseJsonSearch();
+					ArrayList<Tweet> twitterSearch = jsonSearch.ParseJson();
 					tabTwitter.setModel(new TweetModel(twitterSearch));
 			        tabTwitter.getColumnModel().getColumn(0).setHeaderValue("Search");       
 

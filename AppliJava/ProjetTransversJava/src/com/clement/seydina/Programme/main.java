@@ -19,7 +19,7 @@ public class main {
 		// TODO Auto-generated method stub
 
 		Api api = new Api();
-		JSONArray apiReturn = api.GetTimeline();
+		JSONArray apiReturn = api.getTimeline();
 		Json json = new Json(apiReturn);
 		MainWindow window = new MainWindow(json);  
 	}
