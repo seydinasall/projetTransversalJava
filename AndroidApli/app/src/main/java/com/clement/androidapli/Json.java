@@ -9,24 +9,8 @@ import org.json.JSONObject;
 
 public class Json {
 
-	private JSONArray flux ;
-	private String account;
-	
-	public JSONArray getSearch() {
-		return flux;
-	}
-	public void setSearch(JSONArray jArray) {
-		this.flux = jArray;
-	}
 
-	public Json(JSONArray apiReturn){
-		this.flux = apiReturn;
-	}
-	public Json(String str){
-		this.account = str;
-	}
-	
-	public ArrayList<Tweet> ParseJson() throws JSONException {
+	public ArrayList<Tweet> ParseJson(JSONArray flux) throws JSONException {
 		
 		
 		ArrayList<Tweet> listTweet = new ArrayList<Tweet>();
@@ -51,23 +35,5 @@ public class Json {
 			e.printStackTrace();
 		}
 		return listTweet;
-	}
-	
-
-	public Account ParseJsonAccount() throws JSONException{
-		
-		JSONObject jsonObject = new JSONObject(account);
-		Account account = null;
-		try{
-			String name = jsonObject.getString("name");
-			String screen_name = jsonObject.getString("screen_name");
-			String profile_image_url = jsonObject.getString("profile_image_url");
-			
-			account = new Account(name,screen_name,profile_image_url);
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return account;
 	}
 }

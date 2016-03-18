@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         Api api = new Api();
         JSONArray apiReturn = api.GetTimeline();
-        Json json = new Json(apiReturn);
+        Json json = new Json();
         try {
-            timeLine = json.ParseJson();
+            timeLine = json.ParseJson(apiReturn);
 /*
             for(int i=0;i<array.size();i++){
                 System.out.println(array.get(i).getName());
@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
                     Api api = new Api();
                     JSONArray apiReturn = api.GetTimeline();
-                    Json json = new Json(apiReturn);
+                    Json json = new Json();
 
                     try {
-                        ArrayList<Tweet> refresh = json.ParseJson();
+                        ArrayList<Tweet> refresh = json.ParseJson(apiReturn);
                         ListView lv = (ListView) findViewById(R.id.listView);
 
                         ListViewAdapter adapter = new ListViewAdapter(MainActivity.this, refresh);
@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     Api api = new Api();
                     String text = editText.getText().toString();
                     JSONArray apiReturn = api.searchTweets(text);
-                    Json json = new Json(apiReturn);
+                    Json json = new Json();
 
                     try {
-                        ArrayList<Tweet> search = json.ParseJson();
+                        ArrayList<Tweet> search = json.ParseJson(apiReturn);
                         ListView lv = (ListView) findViewById(R.id.listView);
 
                         ListViewAdapter adapter = new ListViewAdapter(MainActivity.this, search);
@@ -112,10 +112,9 @@ public class MainActivity extends AppCompatActivity {
                         Api api = new Api();
                         String text = editText.getText().toString();
                         JSONArray apiReturn = api.searchTweets(text);
-                        Json json = new Json(apiReturn);
-
+                        Json json = new Json();
                         try {
-                            ArrayList<Tweet> search = json.ParseJson();
+                            ArrayList<Tweet> search = json.ParseJson(apiReturn);
                             ListView lv = (ListView) findViewById(R.id.listView);
 
                             ListViewAdapter adapter = new ListViewAdapter(MainActivity.this, search);
@@ -130,9 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            String apiAccount = api.GetAccount();
-            Json jsonAccount = new Json(apiAccount);
-            Account account = jsonAccount.ParseJsonAccount();
+            Account account = api.GetAccount();
             Bitmap bitmap = getBitmapFromURL(account.getAvatar());
 
             ImageView userAvatar = (ImageView) findViewById(R.id.userAvatar);

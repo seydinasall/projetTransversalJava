@@ -432,12 +432,13 @@ public class Api {
 	}
 	
 	
-	public String GetAccount(){
+	public Account GetAccount(){
 		
 		JSONObject jsonresponse = new JSONObject();
 		String str = null;
 		String get_or_post = "GET";
 		String oauth_signature_method = "HMAC-SHA1";
+		Account account = null;
 			try{
 				
 				
@@ -517,7 +518,15 @@ public class Api {
 						 {
 							 // if successful, return String with timeline
 							 str = EntityUtils.toString(response2.getEntity());
-							 
+
+							 //Select information we need
+							 JSONObject jsonObject = new JSONObject(str);
+
+							 String name = jsonObject.getString("name");
+							 String screen_name = jsonObject.getString("screen_name");
+							 String profile_image_url = jsonObject.getString("profile_image_url");
+
+							 account = new Account(name,screen_name,profile_image_url);
 							 
 							 conn.close();
 						 }   
@@ -537,7 +546,7 @@ public class Api {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-	 return str;
+	 return account;
 	 }
 }	
 	
